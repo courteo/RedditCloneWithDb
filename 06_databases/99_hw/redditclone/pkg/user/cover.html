@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>user: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">redditclone/pkg/user/repo.go (100.0%)</option>
+				
+				<option value="file1">redditclone/pkg/user/repo_mock.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package user
+
+import (
+        "database/sql"
+        "errors"
+        "fmt"
+)
+
+var (
+        ErrNoUser  = errors.New(" No user found")
+        ErrBadPass = errors.New(" Invald password")
+)
+
+type UsersMemoryRepository struct {
+        data   *sql.DB
+        LastID uint32
+}
+
+func (repo *UsersMemoryRepository) NewUserID() uint32 <span class="cov8" title="1">{
+        repo.LastID++
+        return repo.LastID
+}</span>
+
+func NewMemoryRepo(db *sql.DB) *UsersMemoryRepository <span class="cov8" title="1">{
+        return &amp;UsersMemoryRepository{
+                data:   db,
+                LastID: 1,
+        }
+}</span>
+
+func (repo *UsersMemoryRepository) FindUser(login string) (*User, error) <span class="cov8" title="1">{
+        u := &amp;User{}
+        row := repo.data.QueryRow("SELECT id, login, password FROM users WHERE login = ?", login)
+        err := row.Scan(&amp;u.ID, &amp;u.Login, &amp;u.Password)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, ErrNoUser
+        }</span>
+        <span class="cov8" title="1">return u, nil</span>
+}
+
+func (repo *UsersMemoryRepository) Authorize(login, pass string) (*User, error) <span class="cov8" title="1">{
+        u := &amp;User{}
+        row := repo.data.QueryRow("SELECT id, login, password FROM users WHERE login = ?", login)
+        err := row.Scan(&amp;u.ID, &amp;u.Login, &amp;u.Password)
+        fmt.Println("row ", row)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, ErrNoUser
+        }</span>
+
+        <span class="cov8" title="1">if u.Password != pass </span><span class="cov8" title="1">{
+                return nil, ErrBadPass
+        }</span>
+
+        <span class="cov8" title="1">return u, nil</span>
+}
+
+func (repo *UsersMemoryRepository) Add(u *User) error <span class="cov8" title="1">{
+
+        _, err := repo.data.Exec(
+                "INSERT INTO users (`login`, `password`, `ID`) VALUES (?, ?, ?)",
+                u.Login,
+                u.Password,
+                repo.NewUserID(),
+        )
+        return err
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package user
+
+import (
+        gomock "github.com/golang/mock/gomock"
+        "reflect"
+)
+
+type MockUserRepo struct {
+        ctrl     *gomock.Controller
+        recorder *MockUserRepoMockRecorder
+}
+
+type MockUserRepoMockRecorder struct {
+        mock *MockUserRepo
+}
+
+func NewMockUserRepo(ctrl *gomock.Controller) *MockUserRepo <span class="cov0" title="0">{
+        mock := &amp;MockUserRepo{ctrl: ctrl}
+        mock.recorder = &amp;MockUserRepoMockRecorder{mock}
+        return mock
+}</span>
+
+func (m *MockUserRepo) EXPECT() *MockUserRepoMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+func (m *MockUserRepo) NewUserID() uint32 <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "NewUserID")
+        ret0, _ := ret[0].(uint32)
+        return ret0
+}</span>
+
+func (mr *MockUserRepoMockRecorder) NewUserID() *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewUserID", reflect.TypeOf((*MockUserRepo)(nil).NewUserID))
+}</span>
+
+func (m *MockUserRepo) FindUser(login string) (*User, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "FindUser", login)
+        ret0, _ := ret[0].(*User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+func (mr *MockUserRepoMockRecorder) FindUser(login string) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindUser", reflect.TypeOf((*MockUserRepo)(nil).FindUser), login)
+}</span>
+
+func (m *MockUserRepo) Add(arg0 *User) error <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Add", arg0)
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+func (mr *MockUserRepoMockRecorder) Add(arg0 interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Add", reflect.TypeOf((*MockUserRepo)(nil).Add), arg0)
+}</span>
+
+func (m *MockUserRepo) Authorize(arg0 string, arg1 string) (*User, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Authorize", arg0, arg1)
+        ret0, _ := ret[0].(*User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+func (mr *MockUserRepoMockRecorder) Authorize(arg0 interface{}, arg1 interface{}) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Authorize", reflect.TypeOf((*MockUserRepo)(nil).Authorize), arg0, arg1)
+}</span>
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>

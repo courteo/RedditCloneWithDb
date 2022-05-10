@@ -1,0 +1,22 @@
+mode: set
+redditclone/pkg/user/repo.go:19.55,22.2 2 1
+redditclone/pkg/user/repo.go:24.55,29.2 1 1
+redditclone/pkg/user/repo.go:31.74,35.16 4 1
+redditclone/pkg/user/repo.go:38.2,38.15 1 1
+redditclone/pkg/user/repo.go:35.16,37.3 1 1
+redditclone/pkg/user/repo.go:41.81,46.16 5 1
+redditclone/pkg/user/repo.go:50.2,50.24 1 1
+redditclone/pkg/user/repo.go:54.2,54.15 1 1
+redditclone/pkg/user/repo.go:46.16,48.3 1 1
+redditclone/pkg/user/repo.go:50.24,52.3 1 1
+redditclone/pkg/user/repo.go:57.55,66.2 2 1
+redditclone/pkg/user/repo_mock.go:17.61,21.2 3 0
+redditclone/pkg/user/repo_mock.go:23.59,25.2 1 0
+redditclone/pkg/user/repo_mock.go:27.43,32.2 4 0
+redditclone/pkg/user/repo_mock.go:34.62,37.2 2 0
+redditclone/pkg/user/repo_mock.go:39.62,45.2 5 0
+redditclone/pkg/user/repo_mock.go:47.73,50.2 2 0
+redditclone/pkg/user/repo_mock.go:52.46,57.2 4 0
+redditclone/pkg/user/repo_mock.go:59.72,62.2 2 0
+redditclone/pkg/user/repo_mock.go:64.75,70.2 5 0
+redditclone/pkg/user/repo_mock.go:72.96,75.2 2 0
